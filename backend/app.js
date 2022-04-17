@@ -1,11 +1,15 @@
 const mongoose = require("mongoose");
 const express = require("express");
+const dotenv = require("dotenv");
 const app = express();
 
 //  Connect to MongoDB
 
-const DB =
-  "mongodb+srv://hamza:FeePvnRDWgaK19hf@cluster0.qokpz.mongodb.net/portfolio?retryWrites=true&w=majority";
+dotenv.config({
+  path: "./config.env",
+});
+const DB = process.env.DATABASE;
+const PORT = process.env.PORT;
 
 mongoose
   .connect(DB, {
@@ -45,6 +49,6 @@ app.get("/signup", (req, res) => {
   res.send("Hello signup!");
 });
 
-app.listen(5000, () => {
+app.listen(PORT, () => {
   console.log("Example app listening on port 5000!");
 });
