@@ -1,11 +1,32 @@
+const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
 
-//  Middleware
+//  Connect to MongoDB
 
+const DB =
+  "mongodb+srv://hamza:FeePvnRDWgaK19hf@cluster0.qokpz.mongodb.net/portfolio?retryWrites=true&w=majority";
+
+mongoose
+  .connect(DB, {
+    // useNewUrlParser: true,
+    // useCreateIndex: true,
+    // useUnifiedTopology: true,
+    // useFindAndModify: false,
+  })
+  .then(() => {
+    console.log("Connected to database");
+  })
+  .catch(() => {
+    console.log("Connection failed");
+  });
+
+//  Connect to MongoDB
+
+//  Middleware
 const middleware = (req, res, next) => {
-    console.log('hello middleware');
-    next();
+  console.log("hello middleware");
+  next();
 };
 
 app.get("/", (req, res) => {
