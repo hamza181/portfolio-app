@@ -3,30 +3,15 @@ const express = require("express");
 const dotenv = require("dotenv");
 const app = express();
 
-//  Connect to MongoDB
-
 dotenv.config({
   path: "./config.env",
 });
-const DB = process.env.DATABASE;
 const PORT = process.env.PORT;
 
-mongoose
-  .connect(DB, {
-    // useNewUrlParser: true,
-    // useCreateIndex: true,
-    // useUnifiedTopology: true,
-    // useFindAndModify: false,
-  })
-  .then(() => {
-    console.log("Connected to database");
-  })
-  .catch(() => {
-    console.log("Connection failed");
-  });
+// for connecting to mongoDB
+require("./db/conn");
 
-//  Connect to MongoDB
-
+const User = require("../model/userSchema");
 //  Middleware
 const middleware = (req, res, next) => {
   console.log("hello middleware");
