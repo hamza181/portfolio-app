@@ -93,4 +93,35 @@ router.post("/register", async (req, res) => {
 //   });
 // });
 
+// login route
+router.post("/signin", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(422).json({
+        status: "error",
+        message: "Please fill all the fields",
+      });
+    }
+
+    const userLogin = await User.findOne({ email });
+
+    if (userLogin) {
+      res.status(200).json({
+        status: "success",
+        message: "User logged in successfully",
+        data: userLogin,
+      });
+    } else {
+      res.status(422).json({
+        status: "error",
+        message: "User does not exist",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 module.exports = router;
