@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -29,13 +30,25 @@ const userSchema = new mongoose.Schema({
     maxlength: [30, "Password must be less than 30 characters"],
   },
   phone: {
-      type: Number,
-      required: true,
+    type: Number,
+    required: true,
   },
   work: {
-      type: String,
-      required: true,
+    type: String,
+    required: true,
   },
+});
+
+// for password hashing
+userSchema.pre("save", async function (next) {
+  console.log('hash');
+  if (this.isModified("password")) {
+    console.log('modified')
+    this.password = await bcrypt.hash(this.password, 12);
+    this.cpassword = bcrypt.hashSync(this.cpassword, 12);
+    // use async await function or use hashasync
+  }
+  next();
 });
 
 const User = mongoose.model("USER", userSchema);
