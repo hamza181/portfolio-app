@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const bcrypt = require("bcryptjs");
 
 // require("../db/conn");
 const User = require("../model/userSchema");
@@ -23,22 +24,23 @@ router.post("/register", async (req, res) => {
   try {
     const userExist = await User.findOne({ email });
     if (userExist) {
-      return res.status(422).json({
-        status: "error",
-        message: "User already exist",
-      });
-    }
+      return res.status(422).json({ message: "User already exist" });
+    } else if (password !== cpassword) {
+      return res
+        .status(422)
+        .json({ message: "password and cpassword are not matching" });
+    } else {
+      const user = new User({ name, email, password, cpassword, phone, work });
 
-    const user = new User({ name, email, password, cpassword, phone, work });
+      const userRegister = await user.save();
 
-    const userRegister = await user.save();
-
-    if (userRegister) {
-      return res.status(200).json({
-        status: "success",
-        message: "User registered successfully",
-        data: userRegister,
-      });
+      if (userRegister) {
+        return res.status(200).json({
+          status: "success",
+          message: "User registered successfully",
+          data: userRegister,
+        });
+      }
     }
   } catch (err) {
     console.log(err);
@@ -107,7 +109,12 @@ router.post("/signin", async (req, res) => {
 
     const userLogin = await User.findOne({ email });
 
+    let isMatch;
     if (userLogin) {
+      isMatch = await bcrypt.compare(password, userLogin.password);
+    }
+
+    if (isMatch) {
       res.status(200).json({
         status: "success",
         message: "User logged in successfully",
@@ -116,7 +123,7 @@ router.post("/signin", async (req, res) => {
     } else {
       res.status(422).json({
         status: "error",
-        message: "User does not exist",
+        message: "Invalid credentioals",
       });
     }
   } catch (error) {
