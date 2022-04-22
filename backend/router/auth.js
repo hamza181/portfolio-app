@@ -116,7 +116,15 @@ router.post("/signin", async (req, res) => {
     }
 
     if (isMatch) {
-      const token = await userLogin.generateAuthToken();
+      // for jwt token
+      const token = await userLogin.generateAuthToken()
+      res.cookie("jwtoken", 'token', {
+        // 3600000 is milli seconds
+        expires: new Date(Date.now() + 3600000),
+        // maxAge: 3600000,
+        httpOnly: true,
+      });
+      // for jwt token
 
       res.status(200).json({
         status: "success",
