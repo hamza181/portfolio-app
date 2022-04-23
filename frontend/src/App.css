@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+
+.signup-main{
+  /* height: 500px; */
+  width: 500px;
+  border-radius: 6px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.signup-form{
+  padding: 0 10px;
+  margin-top: 10px;
+}
+
+.signup-button{
+  align-self: center;
+}
