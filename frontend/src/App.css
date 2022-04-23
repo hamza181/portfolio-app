@@ -44,6 +44,10 @@
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
+.box-shadow{
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
 .signup-form{
   padding: 0 10px;
   margin-top: 10px;
@@ -51,4 +55,8 @@
 
 .signup-button{
   align-self: center;
+}
+
+.home-main{
+  height: calc(100vh - 61px);
 }
