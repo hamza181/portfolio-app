@@ -1,6 +1,81 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { message } from "antd";
 
+const initialState = {
+  email: "",
+  name: "",
+  phone: "",
+  work: "",
+  id: "",
+  msg: "",
+};
 const Contact = () => {
+  const [formData, setFormData] = useState({ ...initialState });
+  const callAboutPage = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/about", {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
+
+      const data = await res.json();
+      if (data) {
+        let { email, name, phone, work, _id } = data.user;
+        setFormData({ ...formData, email, name, phone, work, id: _id });
+      }
+
+      if (!res.status === 200) {
+        const error = new Error(res.error);
+        throw error;
+      } else {
+        console.log("Successful Request");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    callAboutPage();
+  }, []);
+
+  const handleChange = (e) => {
+    try {
+      let name = e.target.name;
+      let value = e.target.value;
+      setFormData({ ...formData, [name]: value });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const clickSend = async (e) => {
+    try {
+      e.preventDefault();
+
+      let { email, name, phone, msg } = formData;
+      const res = await fetch("http://localhost:5000/contact", {
+        method: "POST",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, name, phone, message: msg }),
+      });
+      const data = await res.json();
+
+      if (data) {
+        setFormData({ ...formData, msg: "" });
+        message.success("Message Sent Successfully");
+      } else {
+        message.warning("Message Not Sent");
+      }
+    } catch (error) {
+      message.warning("Message Not Sent");
+      console.log(error);
+    }
+  };
   return (
     <>
       <div className="">
@@ -9,11 +84,11 @@ const Contact = () => {
             <div className="col-lg-10 offset-lg-1 d-flex justify-content-between">
               <div className="col-3 px-2 py-1 box-shadow">
                 <h5>Phone</h5>
-                <p>+1 (123) 456-7890</p>
+                <p>{formData.phone}</p>
               </div>
               <div className="col-3 px-2 py-1 box-shadow">
                 <h5>Email</h5>
-                <p>ameer.hamza1811@gmail.com</p>
+                <p>{formData.email}</p>
               </div>
               <div className="col-3 px-2 py-1 box-shadow">
                 <h5>Address</h5>
@@ -32,25 +107,34 @@ const Contact = () => {
                     <div className="form-group">
                       <input
                         type="text"
+                        name="name"
+                        value={formData.name}
                         className="form-control"
                         autoComplete="none"
                         placeholder="Your Name"
+                        onChange={handleChange}
                       />
                     </div>
                     <div className="form-group px-3">
                       <input
                         type="email"
+                        name="email"
+                        value={formData.email}
                         className="form-control"
                         autoComplete="none"
                         placeholder="Your Email"
+                        onChange={handleChange}
                       />
                     </div>
                     <div className="form-group">
                       <input
                         type="text"
+                        name="phone"
+                        value={formData.phone}
                         className="form-control"
                         autoComplete="none"
                         placeholder="Your Mobile Number"
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -58,11 +142,14 @@ const Contact = () => {
                     <textarea
                       className="form-control"
                       rows="5"
+                      name="msg"
                       placeholder="Message"
+                      onChange={handleChange}
+                      value={formData.msg}
                     ></textarea>
                   </div>
                   <div className="pb-4 mt-3">
-                    <button type="submit" className="btn btn-primary">
+                    <button className="btn btn-primary" onClick={clickSend}>
                       Send Message
                     </button>
                   </div>

@@ -5,8 +5,10 @@ const jwt = require("jsonwebtoken");
 
 // require("../db/conn");
 const User = require("../model/userSchema");
+const Authenticate = require("../middleware/authenticate");
 
 router.get("/", (req, res) => {
+  res.cookie("name", "value");
   res.send("Hello World! router.js");
 });
 
@@ -99,6 +101,7 @@ router.post("/register", async (req, res) => {
 // login route
 router.post("/signin", async (req, res) => {
   try {
+    let token;
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -110,31 +113,82 @@ router.post("/signin", async (req, res) => {
 
     const userLogin = await User.findOne({ email });
 
-    let isMatch;
+    // let isMatch;
     if (userLogin) {
-      isMatch = await bcrypt.compare(password, userLogin.password);
-    }
+      const isMatch = await bcrypt.compare(password, userLogin.password);
 
-    if (isMatch) {
       // for jwt token
-      const token = await userLogin.generateAuthToken()
-      res.cookie("jwtoken", 'token', {
-        // 3600000 is milli seconds
-        expires: new Date(Date.now() + 3600000),
-        // maxAge: 3600000,
-        httpOnly: true,
-      });
+      token = await userLogin.generateAuthToken();
+      // res.cookie('token', 'token');
+
+      res.cookie("namee", "valuee");
+
+      // res.cookie("jwtoken", token, {
+      //   // 3600000 is milli seconds
+      //   expires: new Date(Date.now() + 3600000),
+      //   // maxAge: 3600000,
+      //   httpOnly: true,
+      // });
       // for jwt token
 
-      res.status(200).json({
-        status: "success",
-        message: "User logged in successfully",
-        data: userLogin,
-      });
+      if (!isMatch) {
+        res.status(422).json({
+          status: "error",
+          message: "Invalid credentioals",
+        });
+      } else {
+        res.status(200).json({
+          status: "success",
+          message: "User logged in successfully",
+          data: userLogin,
+        });
+      }
     } else {
       res.status(422).json({
         status: "error",
         message: "Invalid credentioals",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.get("/about", Authenticate, (req, res) => {
+  res.json({
+    user: req.user,
+  });
+});
+
+router.get("/getdata", Authenticate, (req, res) => {
+  res.json({
+    user: req.user,
+  });
+});
+
+router.post("/contact", Authenticate, async (req, res) => {
+  try {
+    const { name, email, phone, message } = req.body;
+    if (!name || !email || !phone || !message) {
+      return res.status(422).json({
+        status: "error",
+        message: "Please fill all the fields",
+      });
+    }
+    const userContact = await User.findOne({ _id: req.userId });
+    if (userContact) {
+      const userMessage = await userContact.addMessage(
+        name,
+        email,
+        phone,
+        message
+      );
+      await userContact.save();
+
+      res.status(201).json({
+        status: "success",
+        message: "Message sent successfully",
+        data: userMessage,
       });
     }
   } catch (error) {

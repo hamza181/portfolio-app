@@ -1,6 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const About = () => {
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    email: "Ameer Hamza",
+    name: "hamza@gmail.com",
+    phone: "03332163313",
+    work: "MERN Developer",
+    id: "3452345234",
+  });
+
+  const callAboutPage = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/about", {
+        method: "GET",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("token"),
+        },
+      });
+
+      const data = await res.json();
+      if (data) {
+        let { email, name, phone, work, _id } = data.user;
+        setFormData({ ...formData, email, name, phone, work, id: _id });
+      }
+
+      if (!res.status === 200) {
+        const error = new Error(res.error);
+        throw error;
+      } else {
+        console.log("Successful Request");
+      }
+    } catch (error) {
+      navigate("/login");
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    callAboutPage();
+  }, []);
   return (
     <>
       <div className="container-fluid mt-5">
@@ -25,17 +65,19 @@ const About = () => {
                   </div>
                   <div className="col-8">
                     <span className="d-flex justify-content-between">
-                      <h5>AMEER HAMZA</h5>
+                      <h5 style={{ textTransform: "uppercase" }}>
+                        {formData.name}
+                      </h5>
                       <button className="btn btn-primary">Edit Profile</button>
                     </span>
-                    <p>Web Developer</p>
+                    <p>{formData.work}</p>
                     <p>Rankings: 1/10</p>
 
                     <div>
-                      <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
+                      <ul className="nav nav-tabs" id="myTab" role="tablist">
+                        <li className="nav-item" role="presentation">
                           <button
-                            class="nav-link active"
+                            className="nav-link active"
                             id="home-tab"
                             data-bs-toggle="tab"
                             data-bs-target="#home"
@@ -47,9 +89,9 @@ const About = () => {
                             About
                           </button>
                         </li>
-                        <li class="nav-item" role="presentation">
+                        <li className="nav-item" role="presentation">
                           <button
-                            class="nav-link"
+                            className="nav-link"
                             id="profile-tab"
                             data-bs-toggle="tab"
                             data-bs-target="#profile"
@@ -62,9 +104,9 @@ const About = () => {
                           </button>
                         </li>
                       </ul>
-                      <div class="tab-content" id="myTabContent">
+                      <div className="tab-content" id="myTabContent">
                         <div
-                          class="tab-pane fade show active"
+                          className="tab-pane fade show active"
                           id="home"
                           role="tabpanel"
                           aria-labelledby="home-tab"
@@ -78,16 +120,18 @@ const About = () => {
                               <p>Profession</p>
                             </div>
                             <div className="col-6">
-                              <p>3452345234</p>
-                              <p>Ameer Hamza</p>
-                              <p>hamza@gmail.com</p>
-                              <p>03332163313</p>
-                              <p>MERN Developer</p>
+                              <p>{formData.id}</p>
+                              <p style={{ textTransform: "capitalize" }}>
+                                {formData.name}
+                              </p>
+                              <p>{formData.email}</p>
+                              <p>{formData.phone}</p>
+                              <p>{formData.work}</p>
                             </div>
                           </div>
                         </div>
                         <div
-                          class="tab-pane fade"
+                          className="tab-pane fade"
                           id="profile"
                           role="tabpanel"
                           aria-labelledby="profile-tab"

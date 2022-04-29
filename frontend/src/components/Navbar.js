@@ -15,7 +15,7 @@ const Navbar = () => {
               width={35}
             />
             <span style={{marginLeft: 7}}>AMEER HAMZA</span>
-            {/* <span class="material-icons">home</span> */}
+            {/* <span className="material-icons">home</span> */}
           </NavLink>
           <button
             className="navbar-toggler"
