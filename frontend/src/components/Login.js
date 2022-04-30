@@ -1,6 +1,7 @@
 import { message } from "antd";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../constant";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -9,22 +10,27 @@ const Login = () => {
 
   const clickLogin = async (e) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:5000/signin", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const res = await fetch(`${API_BASE_URL}/signin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (res.status === 422 || res.status === 500 || !data) {
-      message.error("Invalid Login");
-    } else {
-      message.success("Successful Login");
-      localStorage.setItem('token', data.data.tokens[0].token)
-      navigate("/");
+      if (res.status === 422 || res.status === 500 || !data) {
+        message.error("Invalid Login");
+      } else {
+        message.success("Successful Login");
+        localStorage.setItem("token", data.data.tokens[0].token);
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error);
+      message.error(error.message);
     }
   };
 

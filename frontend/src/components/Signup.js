@@ -1,6 +1,7 @@
 import { message } from "antd";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../constant";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ const Signup = () => {
     e.preventDefault();
     const { name, email, password, cpassword, work, phone } = user;
 
-    const res = await fetch("http://localhost:5000/register", {
+    const res = await fetch(`${API_BASE_URL}/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

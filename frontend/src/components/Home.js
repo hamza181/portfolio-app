@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { API_BASE_URL } from "../constant";
 
 function Home() {
   const [userName, setUserName] = useState("");
   const getUser = async () => {
     try {
-      const res = await fetch("http://localhost:5000/about", {
+      const res = await fetch(`${API_BASE_URL}/about`, {
         method: "GET",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),

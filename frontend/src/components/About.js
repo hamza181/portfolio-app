@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../constant";
 
 const About = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const About = () => {
 
   const callAboutPage = async () => {
     try {
-      const res = await fetch("http://localhost:5000/about", {
+      const res = await fetch(`${API_BASE_URL}/about`, {
         method: "GET",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { message } from "antd";
+import { API_BASE_URL } from "../constant";
 
 const initialState = {
   email: "",
@@ -13,7 +14,7 @@ const Contact = () => {
   const [formData, setFormData] = useState({ ...initialState });
   const callAboutPage = async () => {
     try {
-      const res = await fetch("http://localhost:5000/about", {
+      const res = await fetch(`${API_BASE_URL}/about`, {
         method: "GET",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),
@@ -55,7 +56,7 @@ const Contact = () => {
       e.preventDefault();
 
       let { email, name, phone, msg } = formData;
-      const res = await fetch("http://localhost:5000/contact", {
+      const res = await fetch(`${API_BASE_URL}/contact`, {
         method: "POST",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token"),

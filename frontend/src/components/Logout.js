@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { message } from "antd";
+import { API_BASE_URL } from "../constant";
 
 const Logout = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:5000/logout", {
+    fetch(`${API_BASE_URL}/logout`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
