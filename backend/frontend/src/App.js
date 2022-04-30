@@ -8,8 +8,9 @@ import Contact from "./components/Contact";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import Error from "./components/Error";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'antd/dist/antd.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "antd/dist/antd.css";
+import Logout from "./components/Logout";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="contact" element={<Contact />} />
         <Route path="signup" element={<Signup />} />
         <Route path="login" element={<Login />} />
+        <Route path="logout" element={<Logout />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </>

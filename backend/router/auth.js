@@ -196,4 +196,11 @@ router.post("/contact", Authenticate, async (req, res) => {
   }
 });
 
+router.get("/logout", (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "User logged out successfully",
+  });
+});
+
 module.exports = router;

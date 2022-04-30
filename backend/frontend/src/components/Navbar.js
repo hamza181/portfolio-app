@@ -14,7 +14,7 @@ const Navbar = () => {
               height={35}
               width={35}
             />
-            <span style={{marginLeft: 7}}>AMEER HAMZA</span>
+            <span style={{ marginLeft: 7 }}>AMEER HAMZA</span>
             {/* <span className="material-icons">home</span> */}
           </NavLink>
           <button
@@ -69,6 +69,15 @@ const Navbar = () => {
                   to="/signup"
                 >
                   Registration
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink
+                  className="nav-link active"
+                  aria-current="page"
+                  to="/logout"
+                >
+                  Logout
                 </NavLink>
               </li>
             </ul>
