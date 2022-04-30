@@ -7,10 +7,11 @@ const jwt = require("jsonwebtoken");
 const User = require("../model/userSchema");
 const Authenticate = require("../middleware/authenticate");
 
-router.get("/", (req, res) => {
-  res.cookie("name", "value");
-  res.send("Hello World! router.js");
-});
+// comment it becase when deploy on heroku "/" will take as frontend
+// router.get("/", (req, res) => {
+//   res.cookie("name", "value");
+//   res.send("Hello World! router.js");
+// });
 
 // with async await
 
