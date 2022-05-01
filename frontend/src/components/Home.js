@@ -37,7 +37,7 @@ function Home() {
         <div>
           <p className="text-center">WELCOME</p>
           <h3 className="text-center" style={{textTransform: 'uppercase'}}>{userName}</h3>
-          <h1>We Are The MERN Developers</h1>
+          <h1>We Are The Developers</h1>
         </div>
       </div>
     </>
