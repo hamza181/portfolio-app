@@ -32,6 +32,7 @@ app.use(cors());
 // });
 
 app.use(require("./router/auth"));
+app.use(require("./router/gogreen"));
 //  Middleware
 const middleware = (req, res, next) => {
   console.log("hello middleware");
